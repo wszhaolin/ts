@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.PersonDao">
+
+    <select id="queryAll" resultType="Person">
+        select * from person
+        <where>
+            <choose>
+                <when test="name!=null and name!=''">
+                    name like concat(concat('%',#{name}),'%')
+                </when>
+            </choose>
+        </where>
+          limit #{startPos},#{pageSize}
+    </select>
+    <delete id="delete" parameterType="String">
+        delete from person where id=#{id}
+    </delete>
+    <select id="findOne" resultType="Person">
+         select * from person where id=#{id}
+    </select>
+    <insert id="insert" parameterType="Person">
+        insert into person values (#{id},#{name},#{salary},#{sex},#{age})
+    </insert>
+    <update id="update" parameterType="Person">
+        update person set name=#{name},salary=#{salary},sex=#{sex},age=#{age} where id=#{id}
+    </update>
+    <select id="findTotalCounts" resultType="int">
+        select count(*) from person
+    </select>
+</mapper>

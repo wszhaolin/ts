@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.UserDao">
+
+    <select id="queryName" resultType="User">
+        select * from user where name = #{name}
+    </select>
+
+    <insert id="insert" parameterType="User">
+        insert into user values (#{id},#{name},#{password},#{salt},#{status},#{registertime})
+    </insert>
+
+    <select id="findRolesByUsername" resultType="Role">
+        SELECT
+            id,
+            rolename,
+            roletag
+        FROM
+            role
+        WHERE
+            id IN (
+                SELECT
+                    roleid
+                FROM
+                    t_user_role
+                WHERE
+                    userid = (
+                        SELECT
+                            id
+                        FROM
+                            user
+                        WHERE
+                            name = #{name}
+                    )
+            )
+    </select>
+
+    <select id="findPermissionsByUsername" resultType="Permission">
+        SELECT
+            id,
+            resname,
+            restag,
+            resurl,
+            pemtag
+        FROM
+            permission
+        WHERE
+            id IN (
+                SELECT
+                    permissonid
+                FROM
+                    t_role_permission
+                WHERE
+                    rolerid IN (
+                        SELECT
+                            id
+                        FROM
+                            role
+                        WHERE
+                            id IN (
+                                SELECT
+                                    roleid
+                                FROM
+                                    t_user_role
+                                WHERE
+                                    userid = (
+                                        SELECT
+                                            id
+                                        FROM
+                                            user
+                                        WHERE
+                                            name = #{name}
+                                    )
+                            )
+                    )
+            )
+    </select>
+</mapper>

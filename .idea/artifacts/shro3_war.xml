@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="shro3:war">
+    <output-path>$PROJECT_DIR$/shro3/target</output-path>
+    <root id="archive" name="shro3.war">
+      <element id="artifact" artifact-name="shro3:war exploded" />
+    </root>
+  </artifact>
+</component>
